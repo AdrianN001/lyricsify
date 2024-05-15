@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from "axios"
 
 
-export default async function SearchSongLyrics(api_key: string, title: string, artist: string ): Promise<string[] | void>{
+export default async function SearchSongLyrics(api_key: string, title: string, artist: string ): Promise<string[]>{
     const response:AxiosResponse = await axios({
         method:'get',
 
@@ -15,6 +15,6 @@ export default async function SearchSongLyrics(api_key: string, title: string, a
             artist
         }
     })
-    return response.data['lyrics'];
+    return response.data['lyrics'] ?? Promise.reject();
 }
 

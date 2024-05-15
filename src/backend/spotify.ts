@@ -1,19 +1,26 @@
 import axios from "axios";
 import {AuthUrlResponseObject, Song} from "../interface/spotify"
-import randInt from "../utils/random"
 
 
 async function fetchUserSavedTracks(token: string, offset: number,limit: number): Promise<Song[]>{
-
-    const {data} = await axios.get(`https://api.spotify.com/v1/me/tracks?limit=${limit}&offset=${offset}`, {
-        headers:{
-            'Authorization': `Bearer ${token}`
+    try{
+        const {data} = await axios.get(`https://api.spotify.com/v1/me/tracks?limit=${limit}&offset=${offset}`, {
+            headers:{
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        const songs = data["items"];
+        const flattenSongs = flattenTrackObjects(songs);
+        if(flattenSongs.length == 0){
+            /* The offset was out of bound */
+            return fetchUserSavedTracks(token, offset-50 ,limit)
         }
-    })
-    const songs = data["items"];
-    const flattenSongs = flattenTrackObjects(songs);
-
-    return flattenSongs
+        return flattenSongs
+    }catch(e){
+        console.error(e)
+        return Promise.reject();
+    }
+   
 }
 
 

@@ -7,13 +7,20 @@ import GameInterface from "../interface/game";
 const MAX_LINES = 6;
 
 async function CreateNewGame(spotify_token: string): Promise<Game> {
-    let possible_songs = await fetchUserSavedTracks(spotify_token, randInt(0, 300), 20);
-    
-    let actual_song_to_guess = possible_songs[randInt(0, possible_songs.length)];
+    let possible_songs: any[] = [];
+    try{
+        possible_songs = await fetchUserSavedTracks(spotify_token, randInt(0, 300), 20);
+        
+    }catch(e){
+        return Promise.reject("Couldn't fetch saved tracks");
+    }
+    const actual_song_to_guess = possible_songs[randInt(0, possible_songs.length-1)];
 
     const lyrics = await SearchSongLyrics(process.env.REACT_APP_GENIUS_API_KEY ?? "", actual_song_to_guess.title, actual_song_to_guess.artist);
-    if (!lyrics){
-        return Promise.reject()
+    if (lyrics.length == 0){
+        console.error(actual_song_to_guess, " this song had no lyrics, we search for a new one.")
+        /* No lyric were found, therefore we should try again */
+        return CreateNewGame(spotify_token);
     }
     const start_index = randInt(0, lyrics.length - MAX_LINES);
     const end_index = start_index + MAX_LINES;

@@ -2,7 +2,7 @@ const axios = require("axios");
 const jsdom = require("jsdom");
 const {JSDOM} = jsdom;
 
-
+const MAX_LINES_ALLOWED = 130;
 /**
  * 
  * @param {string} api_key 
@@ -15,21 +15,29 @@ async function SearchSongLyrics(api_key, title, artist ){
     if (!id){
         return;
     }
-    const lyrics = await __fetchSongLyricsById(id);
-    return lyrics
+    try{
+        const lyrics = await __fetchSongLyricsById(id);
+        return lyrics
+    }catch(e){
+        return [];
+    }
 }
 
 /**
  * 
  * @param {string} api_key 
  * @param {string} songId 
- * @returns {Promise<string>}
+ * @returns {Promise<string[]>}
  */
 async function __fetchSongLyricsById(songId){
     try{
         const response  = await axios.get(`https://genius.com/songs/${songId}`)
         const html_page = response.data;
         const lyrics = __parseWebsite(html_page);
+        if(lyrics.length >= MAX_LINES_ALLOWED){
+            /* Possibly not a song lyrics, but a whole tale */
+            return Promise.reject("Not a proper song lyric")
+        }
         return lyrics;
     }catch (error) {
         console.error('Error fetching song lyrics: ', error);
@@ -89,10 +97,11 @@ async function __getSongIdFromArtistAndTitle(api_key, artist, title){
             const songID = firstResult['result']['id'];
             return songID
         }
-        return Promise.reject()
+        console.log(response.data);
+        return Promise.reject("There was no first result")
 
     }catch (error) {
-        return Promise.reject()
+        return Promise.reject("Error at the fetching")
     }
 }
 

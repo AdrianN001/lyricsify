@@ -11,8 +11,13 @@ app.get("/fetch_lyrics", async (req, res) => {
     const api_key = req.headers.authorization;
     const title = req.query['title']; 
     const artist = req.query['artist'];
-    const lyrics = await FindLyrics(api_key ?? "", title, artist);
-    res.json({lyrics});
+    try{
+        const lyrics = await FindLyrics(api_key ?? "", title, artist);
+        res.json({lyrics});
+    }catch(e){
+        console.error(e)
+        res.json({lyrics:[]});
+    }
 })
 
 app.listen(port, () => {

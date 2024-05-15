@@ -1,0 +1,16 @@
+.spotify-login{
+    background-color: #1CB952;
+    min-width: 10vw;
+    min-height: 10vh;
+    margin-top: 5vh;
+    border-color: #121212;
+    color: white;
+    font-size: calc(2vmin);
+    border-radius: 10px;
+}
+.spotify-login>a{
+    border-color: #121212;
+    color: white;
+    font-size: calc(2vmin);
+    border-radius: 10px;
+}
