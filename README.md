@@ -1,5 +1,7 @@
 # Lyricsify
 
+![Screenshot of the app](https://raw.githubusercontent.com/AdrianN001/lyricsify/main/assets/app_screenshot.png)
+
 ## Setup
 The game only relies on two API services, the Spotify API, and the Genius API. Their credentials are stored in a .env file, which looks like the following <br />
 ```
