@@ -84,7 +84,7 @@ function SongGuesser() {
 
     return (
         <div className="main-container">
-        <div className="header">This is an open-source project. If you are interested, take a look a <a target="_blank" href={"https://github.com/AdrianN001/lyricsify"}>repo</a> and <span className='star'>star it</span></div>
+        <div className="header">This is an open-source project. If you are interested, take a look at the <a target="_blank" href={"https://github.com/AdrianN001/lyricsify"}>repo</a> and <span className='star'>star it</span></div>
         <div className="container">
             <h1 className="title">Guess the song by its lyrics</h1>
             {token == "" && <div className='lyrics-container'>Please, login to your spotify account to play</div> }
